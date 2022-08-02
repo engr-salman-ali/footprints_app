@@ -1,0 +1,37 @@
+{% extends 'base.html'  %}
+
+{% block title %}
+<title> Edit Task</title>
+{% endblock %}
+
+    {% block container %}
+
+    <div class= "container">
+      <!-- To allow access to only owner to modify the task -->
+      {% if task_to_update.owner == request.user %}
+    <h1>{{ Update }}</h1>
+
+    <form method="POST" class="row">
+        {% csrf_token %}
+      <!-- Screend dividing out input feild to take everything in  a single line -->
+          <label class="col-lg-1">Tasks</label>
+          <input type="text" class="form col-lg-7" name="task" placeholder="{{ task_to_update.task }}" value="{{ task_to_update.task }}"> &nbsp &nbsp
+            <div class="custom-control custom-switch ">
+              {% if task_to_update.done %}    
+              <input type="checkbox" class="custom-control-input col-lg-2" id="customSwitch1" name="done" default= "{{ task_to_update.done}}" value="{{True}}" checked>
+              <label class="custom-control-label" for="customSwitch1">Status</label>
+        {% else %}
+              <input type="checkbox" class="custom-control-input" id="customSwitch1" name="done" default= "{{ task_to_update.done}}" value="True"  >
+              <label class="custom-control-label" for="customSwitch1">Status</label>
+         {% endif %}
+        </div>  &nbsp &nbsp
+        <button type="submit" class="btn btn-success col-lg-2 ">Update Task</button>
+      </form>
+      {% else %}
+        <p>Access Restricted, You are Not Allowed!</p>
+      {% endif %}
+  
+  </div>
+  
+  {% endblock container %}
+

@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+
+
+{% block title %}
+        <title> Home - FootPrints</title>
+{% endblock title %}
+
+{% block container %}
+<div class="container" >
+  <h1>{{ welcome_text }}</h1>
+  <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+      <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
+      <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
+      <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <a href="{% url 'todolist' %}">
+          <img class="d-block rounded shadow" src="{% static 'images/tasks1.jpg'%}"  alt="Add Your Task">
+          <div class="carousel-caption d-none d-md-block">
+            <p>One place to manage all your Tasks</p>
+          </div>   
+      </a>
+      </div>
+      <div class="carousel-item">
+        <a href="{% url 'aboutUs' %}">
+          <img class="d-block rounded shadow" src="{% static 'images/About1.jpg'%}"  alt="Add Your Task">
+          <div class="carousel-caption d-none d-md-block">
+            <p>Know more about our motives</p>
+          </div>  
+      </a>
+      </div>
+      <div class="carousel-item">
+        <a href="{% url 'contactUs' %}">
+          <img class="d-block rounded shadow" src="{% static 'images/Contact1.jpg'%}"  alt="Add Your Task">
+          <div class="carousel-caption d-none d-md-block">
+            <p>We are happy to connect with you </p>
+          </div>
+      </a>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col-md-10 offset-md-1">
+    <center><p class="h1 text-success">Quick and Easy way to Manage all your tasks</p></center>
+    <center><p class="h2 mt-2">Collect, Create and Collaborate</p></center>
+    <center><p class="h5">Footprints is a onestop platform to organize projects</p></center>
+
+    {% if user.is_authenticated %}
+    <center><a href="{% url 'todolist' %}"><button type="button" class="btn btn-success btn-lg mt-3 shadow ">Let's Get Started</button></a></center>
+    {% else %}
+    <center>
+    <a href="{% url 'login' %}">
+      <button class="btn btn-success btn-lg mt-3 shadow" type="submit">Login</button>
+      </a>  &nbsp &nbsp &nbsp
+      <a href="{% url 'register' %}">
+        <button class="btn btn-primary btn-lg mt-3 shadow" type="submit">Register</button>
+        </a></center>
+    {% endif %}
+   
+  </div>
+  </div>
+</div>
+{% endblock container %}

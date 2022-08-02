@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+
+
+{% block title %}
+        <title> Todo List Manager - FootPrints</title>
+{% endblock title %}
+
+{% block container %}
+<br>
+  <div class= "container">
+
+     <!-- If the task is submitted succesfully success message appears here -->
+      {% if messages %}
+      {% for message in messages %}
+    <div class="alert alert-success" role="alert">
+      {{message}}
+      <!-- Button to close the alerts -->
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+        {% endfor %}
+    {% endif %}
+
+
+      <br>
+     <!--This is a form to add new tasks in the task list  -->
+
+      <form method="POST" class="row">
+        {% csrf_token %}
+      <!-- Screend dividing out input feild to take everything in  a single line -->
+          <label class="col-lg-2">Add your Tasks</label>
+          <input type="text" class="form- col-lg-7" name="task" placeholder="New Task"> &nbsp &nbsp &nbsp
+          <button type="submit" class="btn btn-success col-lg-2">Add Task</button>
+      </form>
+          <br> 
+
+        {% if all_tasks %}
+        <table class ="table table-striped "> 
+          <thead>
+          <tr class="row">
+              <th class='col-1 text-left'>ID</th>
+              <th class='col-4'>Task Details</th>
+              <th class='col-2'>Created</th>
+              <th class='col-2'>Updated</th>
+              <th class='col-1'> Status</th>
+              <th class='col-1'>Update</th>
+              <th class='col-1'>Delete</th>
+            </tr></thead>
+
+          {% for obj in all_tasks %}
+          {% if obj.done %}
+          <tr class="row table-success">
+            <td class="text-left col-1">{{obj.id}}</td>
+            <td class="col-4 text-left"><del>{{obj.task}}</del></td>
+            <td class="col-2">{{obj.created}}</td>
+            <td class="col-2">{{obj.updated}}</td>
+            <td class="col-1">Completed</td>
+            <td class="text-center col-1">
+              <form action="{% url 'update_task' obj.id %}">
+              <input type="image"  class="btn btn-primary text-center" src="{% static 'images/edit1.png' %}" />
+              </form>
+            </td>
+            <td class="col-1 text-center">
+            <form action="{% url 'delete_task' obj.id %}">
+              <input type="image"  class="btn btn-danger text-center" src="{% static 'images/delete.png' %}"/>
+          </form></td>
+        </tr>
+        {% else %}
+
+        <tr class="row table-danger ">
+            <td class="text-left col-1">{{obj.id}}</td>
+            <td class="text-left  col-4"><strong>{{obj.task}}</strong></td>
+            <td class="col-2">{{obj.created}}</td>
+            <td class="col-2">{{obj.updated}}</td>
+            <td class="col-1">Incomplete</td>
+            <td class="text-center col-1">
+              <form action="{% url 'update_task' obj.id %}">
+                <input type="image"  class="btn btn-primary text-center" src="{% static 'images/edit1.png' %}" />
+              </form>
+            </td>
+            <td class="text-center col-1">
+            <form action="{% url 'delete_task' obj.id %}">
+              <input type="image"  class="btn btn-danger text-center" src="{% static 'images/delete.png' %}" />
+          </form></td>
+        </tr>
+
+        {% endif %}
+      
+          {% endfor %}
+        </table>
+        {% else %}
+        <p>No task is added yet </p>
+        {% endif %}
+        <!-- This block is for pagination -->
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-end">
+            <li class="page-item ">
+              <a class="page-link" href="?page=1">|<<</a>
+            </li>
+            {% if all_tasks.has_previous %}
+              <li class="page-item"><a class="page-link" href="?page={{ all_tasks.previous_page_number }}">{{ all_tasks.previous_page_number }}</a></li>
+            {% endif %}
+
+              <li class="page-item"><a class="page-link" href="?page={{ all_tasks.number }}">{{ all_tasks.number }}</a></li>
+           
+            {% if all_tasks.has_next %}
+              <li class="page-item"><a class="page-link" href="?page={{ all_tasks.next_page_number}}">{{ all_tasks.next_page_number}}</a></li>
+            {% endif %}
+              <li class="page-item">
+              <a class="page-link" href="?page={{all_tasks.paginator.num_pages}}">>>|</a>
+            </li>
+          </ul>
+        </nav>
+    
+  </div>
+
+{% endblock container %}
