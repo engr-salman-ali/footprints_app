@@ -21,4 +21,4 @@ To make our services serverless I have used following services
 -AWS Event 
 
 
-To deploy locally please install requirments first
+To deploy locally please install requirments first# footprints
