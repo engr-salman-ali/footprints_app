@@ -1,0 +1,10 @@
+{
+    "dev": {
+        "aws_region": "eu-west-2",
+        "django_settings": "footprints.settings",
+        "profile_name": "default",
+        "project_name": "footprints",
+        "runtime": "python3.9",
+        "s3_bucket": "footprint-bucket-task"
+    }
+}

@@ -12,6 +12,17 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
+import environ
+
+ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent
+env = environ.Env()
+READ_DOT_ENV_FILE = env.bool('DJANGO_READ_DOT_ENV_FILE', default=True)
+
+if READ_DOT_ENV_FILE:
+    env.read_env(str(ROOT_DIR / '.env'))
+
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,12 +34,17 @@ STATIC_DIR = os.path.join(BASE_DIR,'staticfiles')
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-tlm2qd=4d=k=$45js8mfck8ua@f4zpt=re9y47i&^ig4rvawiv'
+SECRET_KEY = env('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG_STATUS')
 
-ALLOWED_HOSTS = []
+#Only for production environment
+if DEBUG:
+    ALLOWED_HOSTS = ['*']
+
+#for testing purpose else replaced by address
+ALLOWED_HOSTS = ['*']  
 
 
 # Application definition
@@ -41,6 +57,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'todolist_app',
+    'storages',
     'users_app',
     'crispy_forms'
 ]
@@ -75,18 +92,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'footprints.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'footprints',
-        'USER':'postgres',
-        'PASSWORD':'Aliza@182',
-        'HOST':'localhost',
-        'PORT':'5432',
+        'NAME': env('DB_NAME'),
+        'USER':env('DB_USER'),
+        'PASSWORD':env('DB_PASSWORD'),
+        'HOST':env('DB_HOST'),
+        'PORT':env('DB_PORT'),
     }
 }
 
@@ -125,7 +141,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
+
+if DEBUG:
+    STATIC_URL = 'static/'
+else:
+    pass
+
+
 
 #Adding static files paths
 
@@ -145,3 +167,5 @@ LOGIN_REDIRECT_URL= '../todo/'
 
 #if user directly tries with the link they will be redirected to this page
 LOGIN_URL = 'login'
+
+
